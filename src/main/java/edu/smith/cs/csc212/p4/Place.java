@@ -1,6 +1,7 @@
 package edu.smith.cs.csc212.p4;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,6 +29,11 @@ public class Place {
 	private boolean terminal;
 	
 	/**
+	 * List of item in this place.
+	 */
+	private List<String> items;
+	
+	/**
 	 * Internal only constructor for Place. Use {@link #create(String, String)} or {@link #terminal(String, String)} instead.
 	 * @param id - the internal id of this place.
 	 * @param description - the user-facing description of the place.
@@ -38,6 +44,7 @@ public class Place {
 		this.description = description;
 		this.exits = new ArrayList<>();
 		this.terminal = terminal;
+		this.items = new ArrayList<>();
 	}
 	
 	/**
@@ -46,6 +53,45 @@ public class Place {
 	 */
 	public void addExit(Exit exit) {
 		this.exits.add(exit);
+	}
+	
+	/**
+	 * Add a single item to items list.
+	 * @param i - name of item.
+	 */
+	public void addItem(String i) {
+		this.items.add(i);
+	}
+	
+	/**
+	 * Add an array of items to items list.
+	 * @param i - An ARRAY of item to add.
+	 */
+	public void addItem(String[] i) {
+		this.items.addAll(Arrays.asList(i));
+	}
+	
+	/**
+	 * Add items using list. I never use it but I guess it would come in handy eventually.
+	 * @param i - list of item to add.
+	 */
+	public void addItem(List<String> i) {
+		this.items.addAll(i);
+	}
+	
+	/**
+	 * Remove all items from room.
+	 */
+	public void removeItems() {
+		this.items.clear();
+	}
+	
+	/**
+	 * Find list of items in this room.
+	 * @return list of items in the current room.
+	 */
+	public List<String> getItems() {
+		return Collections.unmodifiableList(items);
 	}
 	
 	/**
@@ -71,13 +117,66 @@ public class Place {
 	public String getDescription() {
 		return this.description;
 	}
+	
+	public void printDescription() {
+		// No items
+		System.out.println(this.description);
+		if (items.isEmpty()) {
+			return;
+		}
+		
+		// Items size = 1.
+		System.out.print("Here you found ");
+		if (items.size() == 1) {
+			System.out.println(items.get(0) + ".");
+			return;
+		}
+		
+		// Items size > 1.
+		for (String item : this.items) {
+			if (items.indexOf(item) < items.size()-1) {
+				System.out.print(item + ", ");
+			} else {
+				System.out.println("and " + item + ".");
+			}
+		}
+	}
+	
+	/**
+	 * Search through all exits and make secret exit visible.
+	 * @return true if a secret exit is found.
+	 */
+	public boolean search() {
+		boolean found = false;
+		for (Exit e : this.exits) {
+			// Exit.search() return true if it find some secret exit. Overridden in SecretExit.
+			if (e.search()) {
+				found = true;
+			}
+		}
+		return found;
+	}
 
 	/**
 	 * Get a view of the exits from this Place, for navigation.
-	 * @return all the exits from this place.
+	 * @return all the exits from this place, regardless of secrecy.
+	 */
+	public List<Exit> getAllExits() {
+		return Collections.unmodifiableList(exits);
+	}
+	
+	/**
+	 * Get a view of the exits from this Place, for navigation.
+	 * @return only exit that are not secret.
 	 */
 	public List<Exit> getVisibleExits() {
-		return Collections.unmodifiableList(exits);
+		List<Exit> visible = new ArrayList<Exit>();
+		for (Exit exit : exits) {
+			if (!exit.isSecret()) {
+				visible.add(exit);
+			}
+		}
+		return Collections.unmodifiableList(visible);
 	}
 	
 	/**

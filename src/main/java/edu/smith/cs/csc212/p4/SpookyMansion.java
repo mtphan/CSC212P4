@@ -36,15 +36,25 @@ public class SpookyMansion implements GameWorld {
 						"You get the sense a secret is nearby, but you only see the stairs you came from."
 						));
 		basement.addExit(new Exit("entranceHall", "There are stairs leading up."));
+		basement.addExit(new Exit("box", "Look around."));
+		
+		Place box = insert(Place.create("box", "You stumble upon what looks like an old dusty box. It's locked."));
+		box.addExit(new Exit("basement", "Leave the poor box alone. You don't have a key..."));
 
 		Place attic = insert(Place.create("attic",
 				"Something rustles in the rafters as you enter the attic. Creepy.\n" + "It's big up here."));
 		attic.addExit(new Exit("entranceHall", "There are stairs leading down."));
-		attic.addExit(new Exit("attic2", "There is more through an archway"));
+		attic.addExit(new Exit("attic2", "There is more through an archway."));
+		attic.addExit(new Exit("roof", "There is a fragile ladder."));
 
 		Place attic2 = insert(Place.create("attic2", "There's definitely a bat in here somewhere.\n"
 				+ "This part of the attic is brighter, so maybe you're safe here."));
-		attic2.addExit(new Exit("attic", "There is more back through the archway"));
+		attic2.addExit(new Exit("attic", "There is more back through the archway."));
+		
+		Place roof = insert(Place.create("roof", "You've reached the rooftop of the mansion. Be careful not to fall!\n"
+				+ "There is nowhere else to go from here."));
+		roof.addExit(new Exit("attic", "Climb down the ladder."));
+		roof.addExit(new Exit("witch", "I don't want to go back into the mansion!"));
 		
 		Place kitchen = insert(Place.create("kitchen", "You've found the kitchen. You smell old food and some kind of animal."));
 		kitchen.addExit(new Exit("entranceHall", "There is a red door."));
@@ -57,11 +67,12 @@ public class SpookyMansion implements GameWorld {
 		
 		Place secretRoom = insert(Place.create("secretRoom", "You have found the secret room."));
 		secretRoom.addExit(new Exit("hallway0", "There is a long hallway."));
+		secretRoom.addExit(new Exit("basement", "Yet another door. This time it's green."));
 		
-		int hallwayDepth = 3;
+		int hallwayDepth = 5;
 		int lastHallwayPart = hallwayDepth - 1;
 		for (int i=0; i<hallwayDepth; i++) {
-			Place hallwayPart = insert(Place.create("hallway"+i, "This is a very long hallway."));
+			Place hallwayPart = insert(Place.create("hallway"+i, "This is a very long hallway. You saw "+(i+2)+" scratches on the wall."));
 			if (i == 0) {
 				hallwayPart.addExit(new Exit("secretRoom", "Go back."));
 			} else {
@@ -77,6 +88,9 @@ public class SpookyMansion implements GameWorld {
 		Place crypt = insert(Place.terminal("crypt", "You have found the crypt.\n"
 				+"It is scary here, but there is an exit to outside.\n"+
 				"Maybe you'll be safe out there."));
+		
+		Place witch = insert(Place.terminal("witch", "You waited outside for too long and got kidnapped by a witch on her way to a Halloween party! \n"
+				+ "You become Halloween soup!"));
 		
 		// Make sure your graph makes sense!
 		checkAllExitsGoSomewhere();

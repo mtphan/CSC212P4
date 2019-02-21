@@ -11,11 +11,16 @@ public class Exit {
 	/**
 	 * How do we describe this exit to a user, e.g., "A door with a spiderweb."
 	 */
-	private String description;
+	protected String description;
 	/**
 	 * How do we identify the Place that this is going.
 	 */
-	private String target;
+	protected String target;
+	
+	/**
+	 * Printed when the exit is chosen. It's default is "".
+	 */
+	protected String triggerMessage;
 	
 	/**
 	 * Create a new Exit.
@@ -25,6 +30,19 @@ public class Exit {
 	public Exit(String target, String description) {
 		this.description = description;
 		this.target = target;
+		this.triggerMessage = "";
+	}
+	
+	/**
+	 * Create a new Exit with a trigger message.
+	 * @param target - where it goes.
+	 * @param description - how it looks.
+	 * @param message - what is printed when it's chosen.
+	 */
+	public Exit(String target, String description, String message) {
+		this.description = description;
+		this.target = target;
+		this.triggerMessage = message + "\n";
 	}
 	
 	/**
@@ -41,6 +59,30 @@ public class Exit {
 	 */
 	public String getTarget() {
 		return this.target;
+	}
+	
+	/**
+	 * Getter for the trigger message of the exit/choice.
+	 * @return the message printed when the exit is chosen.
+	 */
+	public String getTriggerMessage() {
+		return this.triggerMessage;
+	}
+	
+	/**
+	 * Check whether exit is visible/secret. Overridden in some of its subclasses.
+	 * @return always return false (Exit is always visible). To create a secret exit, use class {@link SecretExit}
+	 */
+	public boolean isSecret() {
+		return false;
+	}
+	
+	/**
+	 * This method do nothing for normal exit. To create a secret exit, use class {@link SecretExit}
+	 * @return always return false since the exit create by this class is never secret.
+	 */
+	public boolean search() {
+		return false;
 	}
 	
 	/**
@@ -76,4 +118,5 @@ public class Exit {
 		}
 		return false;
 	}
+
 }

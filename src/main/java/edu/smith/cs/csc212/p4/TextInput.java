@@ -100,6 +100,37 @@ public class TextInput {
 			System.err.println("Couldn't understand: " + response + " try one of [yes, no]");
 		}
 	}
+	
+	/**
+	 * Give the user a list of choice and ask them to choose (according to index).
+	 * @param prompt - what to ask
+	 * @param choices - list of choice to choose
+	 * @return name of the choice the user picked from the list of choices above.
+	 */
+	public String choiceConfirm(String prompt, List<String> choices) {
+		String choiceName = "";
+		while (true) {
+			// Print the prompt and list of choices
+			System.out.println(prompt);
+			for (int i=0; i<choices.size(); i++) {
+				System.out.println("      ["+i+"] " + choices.get(i));
+			}
+			// Get user input
+			List<String> response = getUserWords(">");
+			Integer choiceIndex = null;
+			try {
+				// Convert choice into Integer type
+				choiceIndex = Integer.parseInt(response.get(0));
+				choiceName = choices.get(choiceIndex);
+				break;
+			// Catch all format error and out of bounds error. I didn't bother to fix negative number error.
+			// So if you enter -1 it would work as if you enter 1. Not sure to call this a bug or a feature.
+			} catch (NumberFormatException | IndexOutOfBoundsException error) {
+				System.out.println("Please input a valid number. This request couldn't be simpler.");
+			}
+		}
+		return choiceName;
+	}
 
 	/**
 	 * Use command-line arguments to set up a TextInput.
