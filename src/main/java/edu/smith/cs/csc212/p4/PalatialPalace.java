@@ -106,12 +106,12 @@ public class PalatialPalace implements GameWorld {
 				+ "While looking around the floor underneath you breaks and you fall through.", "There's now a hole on the floor where you fell through. Jump down?",
 				"A brave choice. The debris from your first fall cushions your landing."));
 		
-		basement.addExit(new SecretExit("entranceHall", "There's a switch on one of the wall.",
-				"You flipped the switch and part of the wall slides open, creating a pathway. As you walk through, the wall closes behind you."));
 		basement.addExit(new LockedExit("dragon", "You have opened so many doors today. This door is, however, locked.", "Didn't I tell you it's locked?",
 				"You have opened so many doors today, including this door!", "You push the door open...", "black key"));
 		basement.addExit(new Exit("death", "Well, I guess I will rot here then.", "Wise choice. You rot in the basement."));
-
+		basement.addExit(new SecretExit("entranceHall", "There's a switch on one of the wall.",
+				"You flipped the switch and part of the wall slides open, creating a pathway. As you walk through, the wall closes behind you."));
+		
 		dragon.addExit(new LockedExit("dragonQuestion", "There's a huge dragon blocking your way. It doesn't notice you.", "You can't just shove the dragon aside you know.",
 				"The dragon is still willing to help you.", "The dragon appreciates your gift very much. It decides to help you escape from the castle.", "rose"));
 		dragon.addExit(new Exit("basement", "Go back. I don't trust dragons.", "You slowly retreat back to the basement."));
@@ -142,7 +142,7 @@ public class PalatialPalace implements GameWorld {
 		
 		// Add items:
 		diningRoom.addItem(new String[] {"a bowl of smelly soup", "a black key", "some candles"});
-		kitchen.addItem(new String[] {"an old rusty knife", "a cup of old tea"});
+		kitchen.addItem(new String[] {"a rusty knife", "a cup of old tea"});
 		balcony.addItem(new String[] {"a rose"});
 
 		// Make sure your graph makes sense!

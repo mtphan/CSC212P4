@@ -74,13 +74,8 @@ public class InteractiveFiction {
 				}
 			}
 			
-			if (action.equals("stuff")) {
-				System.out.println("Use the keyword 'inventory' or 'i' to open your inventory.");
-				continue;
-			}
-			
 			// Allowing player to open their inventory
-			if (action.contains("inventory") || action.equals("i")) {
+			if (action.contains("inventory") || action.equals("i") || action.equals("stuff")) {
 				if (inventory.isEmpty()) {
 					System.out.println("You have nothing on you. Use 'take' command when you see something you want to take.");
 					continue;
@@ -113,14 +108,22 @@ public class InteractiveFiction {
 					System.out.println("Uhm... There are nothing but debris here.");
 					continue;
 				}
+				// Get user's choices
+				List<String> userChoices = input.multipleChoicesConfirm("What do you want to take?", here.getItems());
+				
+				// If user didn't choose anything or typed garbage in
+				if (userChoices.isEmpty()) {
+					System.out.println("You decided to take nothing. You don't own this place after all.");
+					continue;
+				}
 				System.out.println("Taken:");
-				for (String i : here.getItems()) {
+				for (String i : userChoices) {
 					System.out.println("      " + i);
 				}
 				// Add all stuff to inventory.
-				inventory.addAll(here.getItems());
+				inventory.addAll(userChoices);
 				// Remove item from the place.
-				here.removeItems();
+				here.removeItems(userChoices);
 				
 				continue;
 			}
@@ -159,7 +162,7 @@ public class InteractiveFiction {
 					}
 					// The code only gets here if inventory is not empty...
 					// Print list of choice to confirm user's decision.
-					String itemUsed = input.choiceConfirm("What are you going to remove the obstacle with?", inventory);
+					String itemUsed = input.singleChoiceConfirm("What are you going to remove the obstacle with?", inventory);
 					if (locked.unlock(itemUsed)) {
 						// Used the correct item.
 						System.out.println("You try using the " + locked.getKey() + ". It works!");

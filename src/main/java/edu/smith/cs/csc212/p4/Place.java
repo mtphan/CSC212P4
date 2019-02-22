@@ -80,10 +80,10 @@ public class Place {
 	}
 	
 	/**
-	 * Remove all items from room.
+	 * Remove all items that are passed in from room.
 	 */
-	public void removeItems() {
-		this.items.clear();
+	public void removeItems(List<String> itemsToRemove) {
+		this.items.removeAll(itemsToRemove);
 	}
 	
 	/**

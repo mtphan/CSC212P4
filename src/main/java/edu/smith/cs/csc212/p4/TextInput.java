@@ -7,9 +7,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TextInput {
 	/**
@@ -102,12 +105,29 @@ public class TextInput {
 	}
 	
 	/**
+	 * Return a list of important words from a string
+	 * @param s - string to passed in
+	 * @return list of words from string excluding unimportant words.
+	 * 		   Will return the list of words in string if the string contains nothing but unimportant words (doesn't return empty list).
+	 */
+	private List<String> getKeywordsFromString(String s) {
+		String[] unimportantWords = new String[] {"a", "an", "the", "of", "some", "many", "lots", "lot", "few"};
+		List<String> keywords = WordSplitter.splitTextToWords(s);
+		keywords.removeAll(Arrays.asList(unimportantWords));
+		if (keywords.size() > 0) {
+			return keywords;
+		} else {
+			return WordSplitter.splitTextToWords(s);
+		}
+	}
+	
+	/**
 	 * Give the user a list of choice and ask them to choose (according to index).
 	 * @param prompt - what to ask
 	 * @param choices - list of choice to choose
 	 * @return name of the choice the user picked from the list of choices above.
 	 */
-	public String choiceConfirm(String prompt, List<String> choices) {
+	public String singleChoiceConfirm(String prompt, List<String> choices) {
 		String choiceName = "";
 		while (true) {
 			// Print the prompt and list of choices
@@ -130,6 +150,53 @@ public class TextInput {
 			}
 		}
 		return choiceName;
+	}
+	
+	/**
+	 * Give user a list of choice and allow them to enter multiple choice.
+	 * @param prompt - What to ask
+	 * @param choices - list of choices
+	 * @return list of choices the user picked (by numbers or keywords).
+	 */
+	public List<String> multipleChoicesConfirm(String prompt, List<String> choices) {
+		// Unique list of choice
+		Set<String> choiceSet = new HashSet<>();
+		// Print prompt and list of choices
+		System.out.println("Type choice number, keywords (separated) or 'all' to select all:");
+		System.out.println(prompt);
+		for (int i=0; i<choices.size(); i++) {
+			System.out.println("      ["+i+"] " + choices.get(i));
+		}
+		// Get user input
+		List<String> response = getUserWords(">");
+		// User type all only
+		if (response.size() == 1 && response.get(0).equals("all")) {
+			choiceSet.addAll(choices);
+			return new ArrayList<String>(choiceSet);
+		}
+		
+		// User type something other than "all"
+		for (String word : response) {
+			Integer choiceIndex = null;
+			// Test if user typed a number
+			try {
+				choiceIndex = Integer.parseInt(word);
+				// Add choice index (if parsed to int) to choiceSet.
+				if (choiceIndex	>= 0 || choiceIndex < choices.size()) {
+					choiceSet.add(choices.get(choiceIndex));
+				}
+			} catch (NumberFormatException nfe) {
+				// If user didn't type a number, test if user type a word in the choice list.
+				for (String choice : choices) {
+					// Get keywords and check if the word user typed in is a keywords of a choice
+					if (getKeywordsFromString(choice).contains(word)) {
+						choiceSet.add(choice);
+						break;
+					}
+				}
+			}
+		}
+		return new ArrayList<String>(choiceSet);
 	}
 
 	/**
