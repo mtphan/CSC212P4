@@ -62,13 +62,16 @@ public class PalatialPalace implements GameWorld {
 		Place dragonQuestion = insert(
 				Place.create("dragonQuestion", "Agree to let the dragon help you escape?"));
 		
+		@SuppressWarnings("unused")
 		Place death = insert(
 				Place.terminal("death", "Too bad. You have died."));
 		
+		@SuppressWarnings("unused")
 		Place treasureRoom = insert(
 				Place.terminal("treasureRoom", "You have found the treasure room. There are mountains of gold and exotic artifacts here.\n"
 						+ "You haven't found the exit, but at least you are rich now?"));
 		
+		@SuppressWarnings("unused")
 		Place dragonEnd = insert(
 				Place.terminal("dragonEnd", "The dragon carries you on its back and breaks you out of the castle. Both of you fly toward the sunset. How cinematic!"));
 		

@@ -85,10 +85,12 @@ public class SpookyMansion implements GameWorld {
 			}
 		}
 		
+		@SuppressWarnings("unused")
 		Place crypt = insert(Place.terminal("crypt", "You have found the crypt.\n"
 				+"It is scary here, but there is an exit to outside.\n"+
 				"Maybe you'll be safe out there."));
 		
+		@SuppressWarnings("unused")
 		Place witch = insert(Place.terminal("witch", "You waited outside for too long and got kidnapped by a witch on her way to a Halloween party! \n"
 				+ "You become Halloween soup!"));
 		
